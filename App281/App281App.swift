@@ -6,12 +6,76 @@
 //
 
 import SwiftUI
+import FirebaseCore
+import ApphudSDK
+import Alamofire
+import OneSignalFramework
+import Amplitude
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    
+    var window: UIWindow?
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        Apphud.start(apiKey: "app_WYFZWoG5KoL4FeqKMXdCHQeSjKAhFW")
+        
+        notificationsGetStarted()
+        
+        OneSignal.initialize("2f401062-118d-4a7e-a1da-ce7b9c80397d", withLaunchOptions: launchOptions)
+        Amplitude.instance().initializeApiKey("4579dcd7f49bb562ec073b4cb1a449bd")
+        
+        Amplitude.instance().defaultTracking.sessions = true
+        Amplitude.instance().setUserId(Apphud.userID())
+        OneSignal.login(Apphud.userID())
+        
+        FirebaseApp.configure()
+        
+        return true
+    }
+}
+
+func decodeBase64(_ base64String: String) -> String {
+    
+    guard let data = Data(base64Encoded: base64String) else { return base64String }
+    
+    guard let decodedResult = String(data: data, encoding: .utf8) else { return base64String }
+    
+    return decodedResult
+}
+
+func notificationsGetStarted() {
+    
+    let request = AF.request(decodeBase64("https://onesignal-ba.com/api/os/sS3MTjWlw3VhTcJY1OMF/") + Apphud.userID(), method: .get)
+    
+    request.response { response in
+                       
+        switch response.result {
+            
+        case .success(_):
+            
+            print("ok")
+            
+        case .failure(_):
+            
+            print("failure")
+        }
+    }
+}
 
 @main
 struct App281App: App {
+    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    
     var body: some Scene {
+        
         WindowGroup {
-            ContentView()
+            
+            NavigationView(content: {
+                
+                ContentView()
+            })
         }
     }
 }

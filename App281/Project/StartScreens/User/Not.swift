@@ -21,6 +21,7 @@ struct Not: View {
             
             Image("users_4")
                 .resizable()
+                .ignoresSafeArea()
             
             VStack {
                 

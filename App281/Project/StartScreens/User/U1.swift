@@ -21,6 +21,7 @@ struct U1: View {
             
             Image("users_1")
                 .resizable()
+                .ignoresSafeArea()
             
             VStack {
                 

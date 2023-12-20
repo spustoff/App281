@@ -20,6 +20,7 @@ struct Join: View {
             
             Image("users_3")
                 .resizable()
+                .ignoresSafeArea()
             
             VStack {
                 

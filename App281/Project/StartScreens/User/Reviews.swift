@@ -22,6 +22,7 @@ struct Reviews: View {
             
             Image("users_2")
                 .resizable()
+                .ignoresSafeArea()
             
             VStack {
                 
